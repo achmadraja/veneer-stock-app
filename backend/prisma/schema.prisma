@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int          @id @default(autoincrement())
+  username   String       @unique
+  password   String
+  role       String       @default("staff") // admin|staff|viewer
+  createdAt  DateTime     @default(now())
+  productions Production[]
+  transactions StockTransaction[]
+}
+
+model Product {
+  id          Int            @id @default(autoincrement())
+  sku         String         @unique
+  name        String
+  category    String?
+  unit        String
+  price       Float?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  stock       Stock?
+  productions Production[]
+  transactions StockTransaction[]
+  snapshots   StockSnapshot[]
+}
+
+model Stock {
+  id         Int      @id @default(autoincrement())
+  productId  Int      @unique
+  quantity   Int      @default(0)
+  location   String?
+  updatedAt  DateTime @updatedAt
+  product    Product  @relation(fields: [productId], references: [id])
+}
+
+model Batch {
+  id         Int       @id @default(autoincrement())
+  name       String
+  startedAt  DateTime  @default(now())
+  endedAt    DateTime?
+  status     String    @default("active") // active | closed
+  createdBy  Int?
+  productions Production[]
+}
+
+model Production {
+  id         Int      @id @default(autoincrement())
+  batchId    Int
+  productId  Int
+  qty        Int
+  note       String?
+  producedAt DateTime @default(now())
+  createdBy  Int?
+  batch      Batch    @relation(fields: [batchId], references: [id])
+  product    Product  @relation(fields: [productId], references: [id])
+  user       User?    @relation(fields: [createdBy], references: [id])
+}
+
+model StockTransaction {
+  id         Int      @id @default(autoincrement())
+  productId  Int
+  type       String   // 'in' | 'out' | 'adjust'
+  qty        Int
+  note       String?
+  reference  String?
+  createdAt  DateTime @default(now())
+  userId     Int?
+  product    Product  @relation(fields: [productId], references: [id])
+  user       User?    @relation(fields: [userId], references: [id])
+}
+
+model StockSnapshot {
+  id           Int      @id @default(autoincrement())
+  productId    Int
+  snapshotDate DateTime
+  qtyEnd       Int
+  product      Product @relation(fields: [productId], references: [id])
+}
