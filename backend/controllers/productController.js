@@ -1,6 +1,5 @@
 import pool from '../config/db.js';
 
-// CREATE PRODUCT
 export const createProduct = async (req, res) => {
   const { name, description } = req.body;
   try {
@@ -15,7 +14,6 @@ export const createProduct = async (req, res) => {
   }
 };
 
-// READ ALL PRODUCTS
 export const getProducts = async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM products ORDER BY id ASC');
@@ -25,7 +23,6 @@ export const getProducts = async (req, res) => {
   }
 };
 
-// READ ONE PRODUCT
 export const getProductById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -38,7 +35,6 @@ export const getProductById = async (req, res) => {
   }
 };
 
-// UPDATE PRODUCT
 export const updateProduct = async (req, res) => {
   const { id } = req.params;
   const { name, description } = req.body;
@@ -55,7 +51,6 @@ export const updateProduct = async (req, res) => {
   }
 };
 
-// DELETE PRODUCT
 export const deleteProduct = async (req, res) => {
   const { id } = req.params;
   try {

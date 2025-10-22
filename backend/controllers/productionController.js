@@ -1,18 +1,15 @@
 import pool from '../config/db.js';
 
-// CREATE production + update stock
 export const createProduction = async (req, res) => {
   const { batch_id, product_id, quantity } = req.body;
 
   try {
-    // 1️⃣ Catat produksi harian
     const production = await pool.query(
       `INSERT INTO productions (batch_id, product_id, quantity)
        VALUES ($1, $2, $3) RETURNING *`,
       [batch_id, product_id, quantity]
     );
 
-    // 2️⃣ Cek stok terakhir produk ini
     const today = new Date().toISOString().split('T')[0];
     const stockCheck = await pool.query(
       `SELECT * FROM stocks WHERE product_id=$1 ORDER BY date DESC LIMIT 1`,
@@ -24,14 +21,12 @@ export const createProduction = async (req, res) => {
 
     const total_stock = last_stock + quantity;
 
-    // 3️⃣ Insert/update stok hari ini
     const todayStock = await pool.query(
       `SELECT * FROM stocks WHERE product_id=$1 AND date=$2`,
       [product_id, today]
     );
 
     if (todayStock.rows.length > 0) {
-      // update existing stock record for today
       const update = await pool.query(
         `UPDATE stocks
          SET production_today = production_today + $1,
@@ -42,7 +37,6 @@ export const createProduction = async (req, res) => {
       );
       res.json({ message: 'Production updated', production: production.rows[0], stock: update.rows[0] });
     } else {
-      // insert new stock record for today
       const insert = await pool.query(
         `INSERT INTO stocks (product_id, date, last_stock, production_today, total_stock)
          VALUES ($1, $2, $3, $4, $5)
@@ -58,7 +52,6 @@ export const createProduction = async (req, res) => {
   }
 };
 
-// GET daily report
 export const getDailyStockReport = async (req, res) => {
   try {
     const result = await pool.query(`
@@ -74,7 +67,6 @@ export const getDailyStockReport = async (req, res) => {
   }
 };
 
-// GET total production per batch
 export const getBatchProductionReport = async (req, res) => {
   const { batch_id } = req.params;
   try {

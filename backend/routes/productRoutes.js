@@ -11,7 +11,6 @@ import { verifyToken } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// Semua route dilindungi JWT
 router.use(verifyToken);
 
 router.post('/', createProduct);

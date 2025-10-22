@@ -1,6 +1,5 @@
 import pool from '../config/db.js';
 
-// CREATE batch
 export const createBatch = async (req, res) => {
   const { name, start_date } = req.body;
   try {
@@ -15,7 +14,6 @@ export const createBatch = async (req, res) => {
   }
 };
 
-// GET all batches
 export const getBatches = async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM batches ORDER BY id DESC');
@@ -25,7 +23,6 @@ export const getBatches = async (req, res) => {
   }
 };
 
-// CLOSE batch (set inactive)
 export const closeBatch = async (req, res) => {
   const { id } = req.params;
   const { end_date } = req.body;
