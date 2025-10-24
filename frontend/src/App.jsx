@@ -1,29 +1,35 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "./pages/Login";
-import Products from "./pages/Products";
-import Batches from "./pages/Batches";
-import ProductionEntry from "./pages/ProductionEntry";
-import Stock from "./pages/Stock";
-import Reports from "./pages/Reports";
-import Navbar from "./components/Navbar";
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
-function Private({ children }) {
-  const token = localStorage.getItem("token");
-  return token ? children : <Navigate to="/" />;
-}
+function App() {
+  const [count, setCount] = useState(0)
 
-export default function App() {
   return (
     <>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/products" element={<Private><Products /></Private>} />
-        <Route path="/batches" element={<Private><Batches /></Private>} />
-        <Route path="/production" element={<Private><ProductionEntry /></Private>} />
-        <Route path="/stock" element={<Private><Stock /></Private>} />
-        <Route path="/reports" element={<Private><Reports /></Private>} />
-      </Routes>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.jsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
     </>
-  );
+  )
 }
+
+export default App

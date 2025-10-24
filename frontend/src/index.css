@@ -66,15 +66,3 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* simple custom */
-body { background: linear-gradient(180deg,#fffaf6,#f7f3ef); }
-h1 { color: #333; text-align: center; margin-top: 2rem; }
-button { background: #ff7f50; color: white; }
-button:hover { background: #ff6347; }
-button:focus,
-button:focus-visible { outline-color: #ff7f50; }
