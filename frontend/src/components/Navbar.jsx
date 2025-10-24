@@ -2,17 +2,21 @@ import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const logout = () => {
+
+  const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/");
+    navigate("/login");
   };
 
   return (
-    <nav className="bg-amber-700 text-white p-4 flex justify-between">
-      <h1 className="font-bold">Veneer Stock System</h1>
-      <button onClick={logout} className="bg-amber-500 px-4 py-1 rounded">
+    <header className="bg-white shadow p-4 flex justify-between items-center">
+      <h1 className="text-xl font-semibold">Panel Admin</h1>
+      <button
+        onClick={handleLogout}
+        className="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700"
+      >
         Logout
       </button>
-    </nav>
+    </header>
   );
 }

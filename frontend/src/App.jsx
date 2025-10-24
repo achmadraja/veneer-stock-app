@@ -1,23 +1,22 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import App from "./App";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import ReportStock from "./pages/ReportStock";
-import ReportProduction from "./pages/ReportProduction";
-import "./index.css";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+export default function App() {
+  return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/report-stock" element={<ReportStock />} />
-        <Route path="/report-production" element={<ReportProduction />} />
+        <Route path="/" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
-  </React.StrictMode>
-);
+  );
+}
